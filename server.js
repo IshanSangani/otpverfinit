@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const twilio = require('twilio');
 
 // Set up Twilio credentials
-const accountSid = 'AC0b9312bcf53fe9f793c5925a5bed3f5b';
-const authToken = '73a5f1b370d027bd35587b344d55bd18';
+const accountSid = 'my sid...';
+const authToken = 'my authtoken....';
 const twilioClient = twilio(accountSid, authToken);
 
 // Serve your HTML page
@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
         const otp = Math.floor(1000 + Math.random() * 9000);
 
         // Replace with your actual phone number where you want to receive the OTP
-        const phoneNumber = '+919372880589';
+        const phoneNumber = 'my number....';
 
         // Send the OTP via Twilio SMS
         twilioClient.messages.create({
