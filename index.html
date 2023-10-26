@@ -64,6 +64,27 @@
             margin: 20px;
             color: #333;
         }
+
+        .loader {
+            border: 4px solid #f3f3f3; /* Light gray */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .otp-sent-message {
+            color: #4CAF50; /* Light green */
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -73,8 +94,10 @@
             <label for="otp">Enter OTP:</label>
             <br>
             <input type="text" id="otp" name="otp" required>
+            <div class="otp-sent-message">OTP has been sent.</div>
         </form>
         <button class="button" id="generate-otp">Generate OTP</button>
+        <div class="loader" id="loader"></div>
         <button class="button" id="submit-otp">Submit</button>
         <div id="user-info"></div>
     </div>
@@ -86,9 +109,18 @@
         const generateOTPButton = document.getElementById('generate-otp');
         const submitOTPButton = document.getElementById('submit-otp');
         const otpInput = document.getElementById('otp');
+        const loader = document.getElementById('loader');
+        const otpSentMessage = document.querySelector('.otp-sent-message');
 
         generateOTPButton.addEventListener('click', function () {
-            socket.emit('generateOTP');
+            loader.style.display = 'block';
+            generateOTPButton.style.display="none",
+            otpSentMessage.style.display = 'none';
+            setTimeout(() => {
+                socket.emit('generateOTP');
+                loader.style.display = 'none';
+                otpSentMessage.style.display = 'block';
+            }, 2000);
         });
 
         submitOTPButton.addEventListener('click', function () {
@@ -100,6 +132,7 @@
             generateOTPButton.style.display = 'none';
             otpInput.disabled = false;
             submitOTPButton.style.display = 'inline-block';
+            otpSentMessage.style.display = 'none';
         });
 
         socket.on('redirectToVendor', function () {
